@@ -1,0 +1,10 @@
+aws_region         = "ap-south-1"
+project_tag        = "tamir terraform prod"
+vpc_cidr           = "10.1.0.0/16"
+subnet_a_cidr      = "10.1.1.0/24"
+subnet_b_cidr      = "10.1.2.0/24"
+create_subnet_b    = true
+instance_type      = "t3a.micro"
+key_name           = "tamirterraformtask1"
+create_second_ec2  = true
+enable_alb = true
