@@ -7,16 +7,54 @@ It provisions a dynamic, modular AWS infrastructure across multiple environments
 
 ---
 
-## 🔧 What It Deploys
+##  What It Deploys
 
-- 🔹 VPC with public subnets across 2 availability zones
-- 🔹 EC2 Instances (1 or 2, configurable)
-- 🔹 Security Groups for SSH and app port (3000)
-- 🔹 Optional ALB (Application Load Balancer)
-- 🔹 Dockerized app (`adongy/hostname-docker`) deployed via `user_data.sh`
-- 🔹 Remote state management via AWS S3
-- 🔹 Workspace-based environment isolation (`staging`, `prod`)
-- 🔹 Fully modular Terraform structure
+-  VPC with public subnets across 2 availability zones
+-  EC2 Instances (1 or 2, configurable)
+-  Security Groups for SSH and app port (3000)
+-  Optional ALB (Application Load Balancer)
+-  Dockerized app (`adongy/hostname-docker`) deployed via `user_data.sh`
+-  Remote state management via AWS S3
+-  Workspace-based environment isolation (`staging`, `prod`)
+-  Fully modular Terraform structure
+
+---
+
+                                +-----------------------------+
+                                |      Internet / Users       |
+                                +-------------+---------------+
+                                              |
+                                              ▼
+                                       +-------------+
+                                       |    IGW      |
+                                       +------+------+  
+                                              |
+                                              ▼
+                   +-------------------------------------------------------+
+                   |                         VPC                           |
+                   |                   CIDR: 10.x.0.0/16                    |
+                   |                                                       |
+                   |   +---------------------------------------------+     |
+                   |   |      Application Load Balancer (Port 80)    |     |
+                   |   |      + ALB Security Group (Port 80)         |     |
+                   |   +----------------------+----------------------+     |
+                   |                          |                            |
+                   |          +---------------+---------------+           |
+                   |          |                               |           |
+                   |          ▼                               ▼           |
+                   |   +--------------------+       +--------------------+|
+                   |   |     Subnet A       |       |     Subnet B       ||
+                   |   |   (Public AZ-a)    |       |   (Public AZ-b)    ||
+                   |   |  +--------------+  |       |  +--------------+  ||
+                   |   |  |   EC2 #1     |  |       |  |   EC2 #2     |  ||
+                   |   |  |  Docker App  |  |       |  |  Docker App  |  ||
+                   |   |  |  Port 3000   |  |       |  |  Port 3000   |  ||
+                   |   |  |  Shared SG   |  |       |  |  Shared SG   |  ||
+                   |   |  +--------------+  |       |  +--------------+  ||
+                   |   +--------------------+       +--------------------+|
+                   |                                                       |
+                   |     Shared EC2 Security Group (Port 22, 3000)         |
+                   +-------------------------------------------------------+
 
 ---
 
